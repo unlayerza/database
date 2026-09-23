@@ -1,44 +1,44 @@
 # Phase 13 — Generic HA Extraction and Reuse
 
-This phase proves that HA is a reusable Unlayer infrastructure capability.
+> Generic HA is now a separate repository: `unlayerza/ha`. This phase is the Database-side migration/proof phase, not a plan to keep HA implementation inside Database.
 
-## Extraction
+## Database responsibilities
 
-- [ ] Identify database-specific HA assumptions
-- [ ] Remove database-specific logic from HA core
-- [ ] Generic replicated-resource contract
-- [ ] Generic node contract
-- [ ] Generic membership contract
-- [ ] Generic health contract
-- [ ] Generic election contract
-- [ ] Generic quorum contract
-- [ ] Generic fencing contract
-- [ ] Generic recovery contract
-- [ ] Generic chaos hooks
+- [ ] Identify every Database-specific HA assumption
+- [ ] Define the Database adapter for `unlayerza/ha`
+- [ ] Map Database leader/authority state
+- [ ] Map replication positions
+- [ ] Map Database quorum semantics
+- [ ] Map Database fencing requirements
+- [ ] Map Database recovery/resynchronization hooks
+- [ ] Verify Database behavior remains unchanged
 
-## Database adapter
+## Removal
 
-- [ ] Database replication adapter
-- [ ] Database snapshot adapter
-- [ ] Database recovery adapter
-- [ ] Verify database behavior remains unchanged
+- [ ] Remove generic node/membership implementation from Database
+- [ ] Remove generic election implementation from Database
+- [ ] Remove generic quorum implementation from Database
+- [ ] Remove generic fencing implementation from Database
+- [ ] Remove generic lifecycle/chaos implementation from Database
+- [ ] Keep only Database-specific replication and recovery logic
 
 ## Reuse proof
 
-- [ ] Fake non-database replicated resource
-- [ ] Leader election against fake resource
-- [ ] Quorum tests against fake resource
-- [ ] Failover tests against fake resource
-- [ ] Chaos tests against fake resource
-- [ ] Verify HA core has no SQL knowledge
+- [ ] Database consumes `unlayer/ha` without copying its implementation
+- [ ] Three-node Database cluster uses HA contracts
+- [ ] Leader failure test passes
+- [ ] Stale leader is fenced
+- [ ] Node recovery/resynchronization passes
+- [ ] Database-specific tests remain green
 
-## Future services
+## Cross-service proof
 
-- [ ] Identity integration contract
-- [ ] Voice integration contract
-- [ ] API/control-plane integration contract
-- [ ] Resource-specific persistence contract
+- [ ] Identity can consume the same HA contracts
+- [ ] Voice can consume the same HA contracts
+- [ ] HA core contains no SQL/SIP/identity knowledge
 
 ## Acceptance
 
-- [ ] A second non-database service can use HA without copying database-specific implementation
+- [ ] `unlayerza/ha` is the single generic HA implementation
+- [ ] Database is an HA consumer
+- [ ] No second generic HA implementation remains in Database
