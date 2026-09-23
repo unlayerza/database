@@ -280,9 +280,11 @@ A client that has written sequence 1042 must be able to request a read that is g
 
 ## 9. Generic HA Subsystem
 
-This is a first-class requirement.
+Generic HA is a separate foundational repository: `unlayerza/ha`.
 
-The leader/follower machinery must be reusable by future Unlayer systems.
+Database is the first stateful consumer and proving ground for that subsystem. The Database repository must not become the permanent owner of generic membership, election, quorum or fencing logic.
+
+The leader/follower machinery must therefore be exposed through Database-specific adapters while generic cluster coordination remains in `unlayerza/ha`.
 
 Target conceptual module:
 
@@ -930,7 +932,7 @@ These must be resolved through current documentation and experiments rather than
 ## 34. Development Order
 
 1. Storage substrate.
-2. Generic HA core.
+2. Integrate the external `unlayerza/ha` substrate.
 3. Local multi-node harness.
 4. Replication positions/events.
 5. Database transaction integration.
@@ -947,7 +949,7 @@ These must be resolved through current documentation and experiments rather than
 16. Chaos.
 17. Performance/soak.
 18. Production hardening.
-19. Generic HA extraction/reuse proof.
+19. Cross-service HA reuse proof.
 
 ## 35. First Milestone
 
@@ -973,12 +975,12 @@ Then add chaos, snapshots, PITR, and finally the cloud control plane.
 
 Identity, Voice, API, Hosting, and future infrastructure services should consume the generic HA subsystem rather than reimplementing leader/follower behavior.
 
-The database repository is therefore both:
+The database repository is therefore:
 
-1. the first consumer of Unlayer HA, and
-2. the proving ground for reusable HA infrastructure.
+1. the first stateful consumer of Unlayer HA, and
+2. the proving ground for the Database-specific HA adapter.
 
-When this repository reaches Phase 13, another service should be able to adopt HA without knowing anything about SQLite.
+Generic HA ownership lives in `unlayerza/ha`. Identity and Voice should adopt the same HA contracts without importing Database-specific behavior.
 
 ---
 
